@@ -8,10 +8,14 @@ dist
 dist-ssr
 *.local
 
-# env — NEVER commit secrets
+# env — NEVER commit secrets (the Anthropic key lives only in Supabase).
+# .env.production holds PUBLIC build vars (Supabase URL + anon/publishable key,
+# which ship in every client bundle anyway) so Vercel builds are self-contained.
 .env
-.env.*
+.env.*.local
+.env.local
 !.env.example
+!.env.production
 
 # supabase
 supabase/.branches
