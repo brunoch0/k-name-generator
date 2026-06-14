@@ -1,0 +1,7 @@
+# Supabase project config (only the bits this app needs).
+# `project_id` is set when you run `supabase link`.
+
+[functions.generate-name]
+# The frontend calls this with the anon key only — no end-user auth — so we
+# disable JWT verification and authorize via the anon apikey header instead.
+verify_jwt = false

@@ -1,0 +1,117 @@
+{
+  "brand": "K-Name",
+  "lang": { "toggle": "العربية", "name": "English" },
+  "landing": {
+    "eyebrow": "Your name, reborn in Korean",
+    "title": "Discover the Korean name made for you",
+    "subtitle": "Answer a few quick questions and our naming engine composes an authentic Korean name — with real meaning, beautiful hanja, and a card you'll want to share.",
+    "cta": "Reveal my Korean name",
+    "trust": "Free · Takes 60 seconds · No sign-up",
+    "feature1": "Authentic syllables",
+    "feature1d": "Real syllables Koreans actually use in names.",
+    "feature2": "Made from you",
+    "feature2d": "Matched to your traits, values and energy.",
+    "feature3": "Share-ready card",
+    "feature3d": "Download a beautiful card for IG & TikTok."
+  },
+  "ritual": {
+    "0": "Reading your essence…",
+    "1": "Choosing characters that carry your meaning…",
+    "2": "Brushing your name…",
+    "hint": "Crafted with care, never rushed"
+  },
+  "quiz": {
+    "step": "Step {{current}} of {{total}}",
+    "back": "Back",
+    "next": "Continue",
+    "skip": "Skip",
+    "finish": "Reveal my name",
+    "optional": "Optional",
+    "name": { "title": "What's your name?", "sub": "We'll gently echo its sound in your Korean name.", "placeholder": "Your name" },
+    "feel": { "title": "How should your name feel?", "sub": "Pick the energy that fits you.",
+      "masc": "Masculine", "fem": "Feminine", "neutral": "Neutral" },
+    "soundLike": { "title": "Should your name sound like your real name?", "sub": "We can echo your real name's sound — or not.",
+      "yes": "Yes", "mix": "A mix", "no": "No" },
+    "birth": { "title": "When were you born?", "sub": "Your birth chart shapes which element your name supplies." },
+    "traits": { "title": "Pick 2–3 traits", "sub": "What describes you best?" },
+    "value": { "title": "What matters most to you?", "sub": "Choose the value at your core." },
+    "aspiration": { "title": "Who do you want to become?", "sub": "Tap one — or type your own." },
+    "vibe": { "title": "What's your vibe?", "sub": "The aesthetic that feels like you." },
+    "element": { "title": "Which element draws you in?", "sub": "Your chosen 오행 element." },
+    "words3": { "title": "3 words that describe you", "sub": "Optional — adds personal flavour.", "placeholder": "e.g. bold, curious, kind" },
+    "favKorean": { "title": "Favourite Korean words, names or sounds?", "sub": "Optional — we'll weave it in.", "placeholder": "e.g. 사랑, 하늘, Jimin" },
+    "unique": { "title": "One thing that makes you unique", "sub": "Optional — your spark.", "placeholder": "e.g. I collect sunsets" },
+    "handle": { "title": "Your Instagram / Threads handle", "sub": "Optional — and only shown if you allow it.", "placeholder": "@yourhandle", "optIn": "Show \"@handle's Korean name\" on my card" }
+  },
+  "traits": {
+    "calm": "Calm", "ambitious": "Ambitious", "warm": "Warm", "bold": "Bold",
+    "creative": "Creative", "loyal": "Loyal", "free": "Free-spirited",
+    "wise": "Wise", "playful": "Playful", "determined": "Determined"
+  },
+  "values": {
+    "success": "Success", "love": "Love", "freedom": "Freedom",
+    "family": "Family", "growth": "Growth", "art": "Art", "peace": "Peace"
+  },
+  "aspirations": {
+    "leader": "Leader", "healer": "Healer", "creator": "Creator",
+    "explorer": "Explorer", "achiever": "Achiever",
+    "placeholder": "or type your own…"
+  },
+  "vibes": {
+    "surprise": "Surprise me", "soft": "Soft & kind", "elegant": "Elegant",
+    "cute": "Cute", "powerful": "Powerful", "pure": "Pure & classic",
+    "playful": "Playful or fun", "cool": "Cool"
+  },
+  "elements": {
+    "water": "Water", "fire": "Fire", "wood": "Wood", "metal": "Metal", "earth": "Earth"
+  },
+  "reading": {
+    "title": "Your name reading",
+    "subtitle": "Read the way a Korean 작명소 (naming house) would",
+    "saju": "Birth chart · 사주",
+    "flow": "Sound elements · 소리오행",
+    "numerology": "Stroke fortune · 수리",
+    "harmonious": "상생 harmony",
+    "balanced": "Yin–Yang balanced",
+    "supplies": "Supplies",
+    "needs": "needs"
+  },
+  "result": {
+    "yourName": "Your Korean name",
+    "yourNameHandle": "@{{handle}}'s Korean name",
+    "meaning": "What each syllable means",
+    "season": "Your birth element",
+    "pronounce": "How to say it",
+    "another": "Generate another",
+    "restart": "Start over",
+    "downloadPost": "Download · Post (1:1)",
+    "downloadStory": "Download · Story (9:16)",
+    "share": "Share to unlock a hidden meaning",
+    "shared": "Hidden meaning unlocked",
+    "copyLink": "Copy link",
+    "copied": "Link copied!",
+    "hiddenTitle": "Hidden meaning",
+    "cardCta": "Create yours →",
+    "emailTitle": "Get your name certificate + more",
+    "emailSub": "We'll send a printable certificate and new name drops.",
+    "emailPlaceholder": "you@email.com",
+    "emailButton": "Send it to me",
+    "emailThanks": "Done. Check your inbox soon.",
+    "emailInvalid": "Please enter a valid email.",
+    "regenerating": "Composing…"
+  },
+  "handcraft": {
+    "eyebrow": "The human touch",
+    "story": "K-Name began with our founder hand-writing names, one by one, with a brush. We still offer the real thing.",
+    "title": "Get your name hand-brushed by a real person",
+    "sub": "A real calligrapher brushes your name on paper — filmed just for you.",
+    "scarcity": "Only 10 hand-made each week. Share your card to enter the draw.",
+    "button": "Request my hand-brushed name",
+    "thanks": "Request received. We'll be in touch by email.",
+    "entered": "You're entered in this week's draw.",
+    "special": "Want a specific surname or hanja (e.g. 허, or a 道 character)? The hand-brushed tier handles special requests the auto-generator can't.",
+    "shareToEnter": "Share your card to enter the draw"
+  },
+  "footer": { "handle": "@knameapp", "tagline": "Made with care · K-Name" },
+  "error": { "generic": "Something went wrong composing your name. Please try again.", "retry": "Try again" }
+}
