@@ -27,7 +27,11 @@ export default function Analyzing({ onDone }: { onDone: () => void }) {
       <div className="relative h-32 w-32">
         <div className="ink-splash absolute inset-0 animate-fade-in opacity-20" />
         <div className="absolute inset-4 flex items-center justify-center rounded-full border border-ink/10 bg-cream/60 shadow-inner">
-          <span key={i} className="font-brush animate-scale-in text-6xl text-ink">
+          <span
+            key={i}
+            className="font-brush animate-scale-in text-6xl leading-none text-ink"
+            style={{ position: "relative", top: "0.06em" }}
+          >
             {["名", "字", "墨"][i] ?? "名"}
           </span>
         </div>
