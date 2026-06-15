@@ -38,7 +38,15 @@ const ROMAN: Record<string, string> = {
 };
 const roman = (h: string): string => ROMAN[h] ?? h;
 
-const BLOCKED_PAIRS = new Set<string>(["미미", "소소", "가가", "별별", "봄봄", "시체", "사망"]);
+// Pairs that read as an awkward/negative common Korean word — never emit these.
+const BLOCKED_PAIRS = new Set<string>([
+  "미미", "소소", "가가", "별별", "봄봄", // childish reduplications
+  "시체", "사망", // death
+  "성별", // = "gender/sex"
+  "빈민", // = "the poor/paupers"
+  "유서", // = "will/testament" (death connotation)
+  "소주", // = "soju" (the liquor)
+]);
 
 const ASPIRATION_TAGS: Record<string, Tag[]> = {
   leader: ["ambitious", "strong", "determined"],
