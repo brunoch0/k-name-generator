@@ -102,9 +102,11 @@ export default function ResultCard({
   async function share() {
     const url = "https://k-name-generator-chohj0228-8690s-projects.vercel.app";
     // viral hook: states their name + invites the friend to get their own
-    const text = t("result.shareText", {
+    const archetype = pick(result.archetype_en ?? "", result.archetype_ar ?? "").trim();
+    const text = t(archetype ? "result.shareTextArchetype" : "result.shareText", {
       hangul: result.fullName.hangul,
       roman: result.fullName.romanization,
+      archetype,
     });
     try {
       if (navigator.share) {
@@ -171,8 +173,8 @@ export default function ResultCard({
       {result.analysis && (
         <section className="mt-4 rounded-3xl border border-clay/15 bg-white/70 p-5 shadow-sm">
           <h3 className="text-center text-base font-extrabold text-ink">{t("reading.title")}</h3>
-          <p className="mb-4 text-center text-xs text-ink/50">{t("reading.subtitle")}</p>
-          <div className="space-y-3 text-sm leading-relaxed text-ink/75">
+          <p className="mb-4 text-center text-xs text-ink/60">{t("reading.subtitle")}</p>
+          <div className="space-y-3 text-sm leading-relaxed text-ink/85">
             <div>
               <div className="mb-0.5 text-xs font-bold uppercase tracking-wide text-clay">
                 {t("reading.saju")}

@@ -27,8 +27,8 @@ const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 
 const NARRATIVE_SYSTEM =
   "You are a poetic, classy bilingual copywriter for a Korean-name app aimed at Arabic speakers. You are GIVEN a finished, authentic 2-syllable Korean GIVEN name (이름) and its 성명학 (Korean onomancy) analysis. The person keeps their own family name, so NEVER invent or mention a Korean surname. You MUST NOT change the name, syllables, or analysis. Write warm, evocative copy explaining why this name fits the person — weaving in the syllable meanings and the 오행 element the name supplies to balance their 사주. Prefer the syllables whose meanings overlap most with the user's answers, and CITE that overlap explicitly in narrative_en and narrative_ar so it feels personally made for them (e.g. \"because you chose freedom, we gave you 宇 — the cosmos\"). Keep each narrative to 1–2 lines. Return ONLY valid JSON, no markdown, exactly:\n" +
-  `{ "narrative_en": "", "narrative_ar": "", "hidden_en": "", "hidden_ar": "" }` +
-  "\nnarrative_* = why this name is them, citing their answers. hidden_* = one extra poetic line about the combined meaning. Fill BOTH English and Arabic naturally (not literal translations).";
+  `{ "archetype_en": "", "archetype_ar": "", "narrative_en": "", "narrative_ar": "", "hidden_en": "", "hidden_ar": "" }` +
+  "\narchetype_* = a short, brag-worthy identity TITLE of 2–4 words in Title Case, e.g. \"The Luminous Healer\" / \"الشافي المُضيء\" — something the person would be proud to post. narrative_* = why this name is them, citing their answers. hidden_* = one extra poetic line about the combined meaning. Fill BOTH English and Arabic naturally (not literal translations).";
 
 function stripFences(text: string): string {
   let t = text.trim().replace(/^```(?:json)?/i, "").replace(/```$/i, "").trim();
@@ -39,6 +39,8 @@ function stripFences(text: string): string {
 }
 
 interface Narr {
+  archetype_en?: string;
+  archetype_ar?: string;
   narrative_en: string;
   narrative_ar: string;
   hidden_en?: string;
@@ -136,6 +138,8 @@ Deno.serve(async (req: Request) => {
     try {
       const narr = await enrichNarrative(apiKey, profile, result);
       if (narr) {
+        if (narr.archetype_en) result.archetype_en = narr.archetype_en;
+        if (narr.archetype_ar) result.archetype_ar = narr.archetype_ar;
         result.narrative_en = narr.narrative_en;
         result.narrative_ar = narr.narrative_ar;
         if (narr.hidden_en) result.hidden_en = narr.hidden_en;

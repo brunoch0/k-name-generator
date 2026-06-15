@@ -102,6 +102,7 @@
     "shareFriends": "Share with friends",
     "shareUnlockHint": "Share to unlock a hidden meaning",
     "shareText": "My Korean name is {{hangul}} ({{roman}}). Get yours free in 60 seconds — what will yours be?",
+    "shareTextArchetype": "My Korean name is {{hangul}} ({{roman}}) — {{archetype}}. Get yours free in 60 seconds. What will yours be?",
     "shared": "Hidden meaning unlocked",
     "copyLink": "Copy link",
     "copied": "Link copied!",

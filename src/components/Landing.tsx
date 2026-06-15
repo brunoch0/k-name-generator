@@ -36,7 +36,7 @@ export default function Landing({ onStart }: { onStart: () => void }) {
           <span className="font-hangul-serif text-gold">름</span>
         </div>
 
-        <p className="mt-6 max-w-xl animate-fade-up text-base leading-relaxed text-ink/65 sm:text-lg">
+        <p className="mt-6 max-w-xl animate-fade-up text-base leading-relaxed text-ink/80 sm:text-lg">
           {t("landing.subtitle")}
         </p>
 
@@ -47,17 +47,17 @@ export default function Landing({ onStart }: { onStart: () => void }) {
         >
           {t("landing.cta")} <span aria-hidden>→</span>
         </button>
-        <p className="mt-3 animate-fade-up text-sm text-ink/45">{t("landing.trust")}</p>
+        <p className="mt-3 animate-fade-up text-sm font-medium text-ink/60">{t("landing.trust")}</p>
 
         <div className="mt-12 grid w-full animate-fade-up gap-4 sm:grid-cols-3">
           {features.map((f) => (
             <div
               key={f.title}
-              className="rounded-2xl border border-clay/15 bg-white/70 p-5 text-start shadow-sm"
+              className="rounded-2xl border border-clay/25 bg-white/80 p-5 text-start shadow-sm"
             >
               <div className="font-serifko text-sm font-bold tracking-widest text-clay">{f.n}</div>
-              <div className="mt-2 font-semibold text-ink">{f.title}</div>
-              <div className="mt-1 text-sm text-ink/55">{f.desc}</div>
+              <div className="mt-2 font-bold text-ink">{f.title}</div>
+              <div className="mt-1 text-sm text-ink/70">{f.desc}</div>
             </div>
           ))}
         </div>

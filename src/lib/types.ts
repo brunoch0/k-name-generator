@@ -83,6 +83,9 @@ export interface NameResult {
     hangul: string;
     romanization: string;
   };
+  /** A short, brag-worthy identity title, e.g. "The Luminous Healer". */
+  archetype_en?: string;
+  archetype_ar?: string;
   syllables: ResultSyllable[];
   fullName: {
     hangul: string;

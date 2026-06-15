@@ -17,9 +17,9 @@ body {
   font-family: theme("fontFamily.sans");
   color: theme("colors.ink");
   background:
-    radial-gradient(1100px 700px at 12% -10%, #fbe7e0 0%, transparent 55%),
-    radial-gradient(900px 600px at 110% 0%, #efe6d6 0%, transparent 50%),
-    linear-gradient(180deg, #fdf8f3 0%, #f7efe7 100%);
+    radial-gradient(1100px 700px at 12% -10%, #f6dbd1 0%, transparent 55%),
+    radial-gradient(900px 600px at 110% 0%, #ecdac4 0%, transparent 50%),
+    linear-gradient(180deg, #fdf5ef 0%, #f3e5d7 100%);
   background-attachment: fixed;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -148,8 +148,8 @@ html[lang="ar"] body {
     @apply border-rose bg-rose text-white;
   }
   .field {
-    @apply w-full rounded-2xl border-2 border-clay/20 bg-white/85 px-5 py-4 text-lg
-      text-ink shadow-sm outline-none transition placeholder:text-ink/35
+    @apply w-full rounded-2xl border-2 border-clay/35 bg-white/90 px-5 py-4 text-lg
+      text-ink shadow-sm outline-none transition placeholder:text-ink/40
       focus:border-rose focus:ring-4 focus:ring-rose/10;
   }
 }

@@ -301,7 +301,7 @@ function Header({ title, sub, optional, optLabel }: { title: string; sub: string
         </span>
       )}
       <h2 className="text-2xl font-extrabold leading-snug text-ink sm:text-3xl">{title}</h2>
-      <p className="mx-auto mt-2 max-w-md text-sm text-ink/55 sm:text-base">{sub}</p>
+      <p className="mx-auto mt-2 max-w-md text-sm text-ink/70 sm:text-base">{sub}</p>
     </div>
   );
 }

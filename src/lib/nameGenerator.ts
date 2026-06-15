@@ -67,6 +67,43 @@ const VIBE_TAGS: Record<string, Tag[]> = {
   cool: ["cool"],
 };
 
+// ── Archetype (brag-worthy identity title) ──────────────────────────────────
+const VIBE_ADJ: Record<string, { en: string; ar: string }> = {
+  surprise: { en: "Unexpected", ar: "المُفاجئ" },
+  soft: { en: "Gentle", ar: "اللطيف" },
+  elegant: { en: "Elegant", ar: "الأنيق" },
+  cute: { en: "Radiant", ar: "المُشِع" },
+  powerful: { en: "Bold", ar: "الجريء" },
+  pure: { en: "Pure", ar: "النقيّ" },
+  playful: { en: "Playful", ar: "المَرِح" },
+  cool: { en: "Cool", ar: "الرائع" },
+};
+const ASPIRATION_NOUN: Record<string, { en: string; ar: string }> = {
+  leader: { en: "Leader", ar: "القائد" },
+  healer: { en: "Healer", ar: "الشافي" },
+  creator: { en: "Creator", ar: "المُبدِع" },
+  explorer: { en: "Explorer", ar: "المُستكشِف" },
+  achiever: { en: "Achiever", ar: "المُنجِز" },
+};
+const ELEMENT_NOUN: Record<string, { en: string; ar: string }> = {
+  water: { en: "Tide", ar: "المدّ" },
+  fire: { en: "Flame", ar: "اللهب" },
+  wood: { en: "Bloom", ar: "الزهرة" },
+  metal: { en: "Blade", ar: "النصل" },
+  earth: { en: "Mountain", ar: "الجبل" },
+};
+
+function archetypeOf(profile: Profile, element: string): { en: string; ar: string } {
+  const adj = VIBE_ADJ[profile.vibe] ?? { en: "True", ar: "الأصيل" };
+  const key = (profile.aspiration ?? "").trim().toLowerCase();
+  const noun =
+    ASPIRATION_NOUN[key] ??
+    Object.keys(ASPIRATION_NOUN).map((k) => (key.includes(k) ? ASPIRATION_NOUN[k] : null)).find(Boolean) ??
+    ELEMENT_NOUN[element] ??
+    { en: "Soul", ar: "الروح" };
+  return { en: `The ${adj.en} ${noun.en}`, ar: `${noun.ar} ${adj.ar}` };
+}
+
 function aspirationTags(aspiration: string): Tag[] {
   const key = (aspiration ?? "").trim().toLowerCase();
   if (ASPIRATION_TAGS[key]) return ASPIRATION_TAGS[key];
@@ -243,8 +280,12 @@ export function generateNameLocal(
     yinYang: { pattern: yy.pattern, balanced: yy.balanced },
   };
 
+  const archetype = archetypeOf(profile, yongsin);
+
   return {
     givenName: { hangul: givenHangul, romanization: givenRoman },
+    archetype_en: archetype.en,
+    archetype_ar: archetype.ar,
     syllables: [
       { hangul: s1.hangul, hanja: s1.hanja, meaning_en: s1.meaning_en, meaning_ar: s1.meaning_ar },
       { hangul: s2.hangul, hanja: s2.hanja, meaning_en: s2.meaning_en, meaning_ar: s2.meaning_ar },

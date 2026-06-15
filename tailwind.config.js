@@ -4,13 +4,13 @@ export default {
   theme: {
     extend: {
       colors: {
-        ink: "#2a2118",
+        ink: "#241c14",
         cream: "#fdf8f3",
-        blush: "#f7e6e3",
-        clay: "#d98b78",
-        rose: "#c96a6a",
-        gold: "#c79a4b",
-        sage: "#7c9885",
+        blush: "#f3d9d0",
+        clay: "#bd6a4e",
+        rose: "#b94a4a",
+        gold: "#b9852f",
+        sage: "#5f8268",
       },
       fontFamily: {
         sans: ["Plus Jakarta Sans", "system-ui", "sans-serif"],

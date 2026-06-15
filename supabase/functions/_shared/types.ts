@@ -61,6 +61,8 @@ export interface NameAnalysis {
 export interface NameResult {
   surname?: { hangul: string; romanization: string; reason_en: string; reason_ar: string };
   givenName: { hangul: string; romanization: string };
+  archetype_en?: string;
+  archetype_ar?: string;
   syllables: ResultSyllable[];
   fullName: { hangul: string; romanization: string };
   narrative_en: string;

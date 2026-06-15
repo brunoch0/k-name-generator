@@ -46,6 +46,8 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
       ? t("result.yourNamePossessive", { name: realName })
       : t("result.yourName");
   const personalized = Boolean(handle || realName);
+  const archetype = pick(result.archetype_en ?? "", result.archetype_ar ?? "").trim();
+  const auspicious = Boolean(result.analysis?.soundFlow.harmonious);
   const hasElementLine = Boolean((loc === "ar" ? result.element_ar : result.element_en).trim());
 
   return (
@@ -60,9 +62,9 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
         className="absolute inset-0"
         style={{
           background:
-            "radial-gradient(120% 80% at 0% 0%, #fbe7e0 0%, transparent 55%)," +
-            "radial-gradient(120% 90% at 100% 0%, #f0e6d4 0%, transparent 50%)," +
-            "linear-gradient(160deg, #fffaf6 0%, #f8ece2 55%, #f3e2da 100%)",
+            "radial-gradient(120% 80% at 0% 0%, #f6cabb 0%, transparent 55%)," +
+            "radial-gradient(120% 95% at 100% 0%, #ecd4b4 0%, transparent 52%)," +
+            "linear-gradient(160deg, #fdf1e8 0%, #efd9c9 55%, #e7c4b4 100%)",
         }}
       />
       {/* hanja watermark */}
@@ -84,7 +86,7 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
           <span className="text-sm font-extrabold tracking-tight">
             <span className="font-hangul">名</span> {t("brand")}
           </span>
-          <span className="rounded-full bg-white/70 px-3 py-1 text-[11px] font-semibold text-clay shadow-sm">
+          <span className="rounded-full bg-white/85 px-3 py-1 text-[11px] font-bold text-clay shadow-sm">
             {result.analysis
               ? `${result.analysis.yongsin.hanja} ${pick(result.analysis.yongsin.label_en, result.analysis.yongsin.label_ar)}`
               : pick(result.element_en, result.element_ar).split(/[,،]/)[0].slice(0, 26)}
@@ -93,7 +95,7 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
 
         {/* hero */}
         <div className="text-center">
-          <div className={`text-xs font-semibold tracking-[0.2em] text-clay ${personalized ? "" : "uppercase"}`}>
+          <div className={`text-[11px] font-bold tracking-[0.22em] text-clay ${personalized ? "" : "uppercase"}`}>
             {eyebrow}
           </div>
           <div
@@ -103,11 +105,18 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
             {result.fullName.hangul}
           </div>
           <div
-            className={`mt-3 font-bold tracking-tight text-rose ${late}`}
-            style={{ fontSize: mode === "story" ? 30 : 24 }}
+            className={`mt-3 font-extrabold tracking-tight text-rose ${late}`}
+            style={{ fontSize: mode === "story" ? 32 : 26 }}
           >
             {result.fullName.romanization}
           </div>
+          {archetype && (
+            <div className={`mt-3.5 flex justify-center ${late}`}>
+              <span className="inline-block rounded-full bg-ink px-4 py-1.5 text-[11px] font-bold uppercase tracking-[0.16em] text-cream shadow-md">
+                {archetype}
+              </span>
+            </div>
+          )}
         </div>
 
         {/* syllable meanings */}
@@ -115,17 +124,17 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
           {result.syllables.map((s, idx) => (
             <div
               key={idx}
-              className="flex min-w-[120px] flex-col items-center gap-1.5 rounded-2xl bg-white/75 px-3 py-3.5 shadow-sm"
+              className="flex min-w-[120px] flex-col items-center gap-1.5 rounded-2xl bg-white/90 px-3 py-3.5 shadow-md"
             >
               <div className="flex items-center justify-center gap-1.5 leading-none">
-                <span className="font-hangul-serif text-2xl font-extrabold leading-none text-ink">
+                <span className="font-hangul-serif text-[26px] font-extrabold leading-none text-ink">
                   {s.hangul}
                 </span>
                 {s.hanja && (
-                  <span className="text-base font-bold leading-none text-clay">{s.hanja}</span>
+                  <span className="text-lg font-bold leading-none text-clay">{s.hanja}</span>
                 )}
               </div>
-              <div className="text-center text-[12px] leading-tight text-ink/65">
+              <div className="text-center text-[12.5px] font-medium leading-tight text-ink/80">
                 {pick(s.meaning_en, s.meaning_ar).split(/[,،]/)[0]}
               </div>
             </div>
@@ -134,23 +143,25 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
 
         {/* 소리오행 sound-element flow + 사주 보충 */}
         {result.analysis && (
-          <div className={`flex flex-col items-center gap-1.5 ${late}`}>
+          <div className={`flex flex-col items-center gap-2 ${late}`}>
             <div className="flex items-center gap-1.5">
               {result.analysis.soundFlow.nodes.map((n, i) => (
                 <Fragment key={i}>
-                  {i > 0 && <span className="text-sm text-clay/50">→</span>}
-                  <span className="font-hangul rounded-lg bg-white/70 px-2 py-1 text-xs font-bold text-ink/80 shadow-sm">
+                  {i > 0 && <span className="text-sm font-bold text-clay">→</span>}
+                  <span className="font-hangul rounded-lg bg-white/90 px-2.5 py-1 text-[13px] font-bold text-ink shadow-sm">
                     {n.hangul}
                     <span className="ms-0.5 text-clay">{n.hanja}</span>
                   </span>
                 </Fragment>
               ))}
             </div>
-            <div className="flex items-center gap-2 text-[11px] font-semibold">
-              {result.analysis.soundFlow.harmonious && (
-                <span className="text-sage">{t("reading.harmonious")}</span>
+            <div className="flex items-center gap-2 text-[11px] font-bold uppercase tracking-wide">
+              {auspicious && (
+                <span className="rounded-full bg-sage/15 px-2.5 py-1 text-sage">
+                  {t("reading.harmonious")}
+                </span>
               )}
-              <span className="text-clay">
+              <span className="rounded-full bg-rose/10 px-2.5 py-1 text-rose">
                 {t("reading.needs")} {result.analysis.yongsin.hanja}
               </span>
             </div>
@@ -159,14 +170,14 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
 
         {/* narrative */}
         <p
-          className={`text-center font-medium leading-relaxed text-ink/75 ${late}`}
-          style={{ fontSize: mode === "story" ? 17 : 14 }}
+          className={`text-center font-medium leading-relaxed text-ink/90 ${late}`}
+          style={{ fontSize: mode === "story" ? 17 : 14.5 }}
         >
           {pick(result.narrative_en, result.narrative_ar)}
         </p>
 
         {/* element + pronunciation */}
-        <div className={`space-y-1.5 text-center text-[12.5px] text-ink/55 ${late}`}>
+        <div className={`space-y-1.5 text-center text-[12.5px] font-medium text-ink/70 ${late}`}>
           {hasElementLine && <p>{pick(result.element_en, result.element_ar)}</p>}
           <p>{result.pronunciation}</p>
         </div>
@@ -184,9 +195,9 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
         )}
 
         {/* footer */}
-        <div className="mt-1 flex items-center justify-between border-t border-clay/15 pt-3 text-[11.5px] text-ink/45">
-          <span className="font-semibold">{t("footer.handle")}</span>
-          <span className="font-bold text-rose">{t("result.cardCta")}</span>
+        <div className="mt-1 flex items-center justify-between border-t border-clay/25 pt-3 text-[12px] text-ink/60">
+          <span className="font-bold">{t("footer.handle")}</span>
+          <span className="font-extrabold text-rose">{t("result.cardCta")}</span>
         </div>
       </div>
     </div>
