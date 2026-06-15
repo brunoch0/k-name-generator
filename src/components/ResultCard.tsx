@@ -57,6 +57,13 @@ export default function ResultCard({
   // opt-in social handle (strictly only when the user allowed it)
   const handle = profile?.handleOptIn && profile?.handle ? profile.handle : undefined;
 
+  // Lemon Squeezy hosted checkout for the hand-brushed tier. When unset, the
+  // section falls back to a free email request so it still works.
+  const checkoutUrl = (import.meta.env.VITE_HANDCRAFT_CHECKOUT_URL ?? "").trim();
+  const payHandcraft = () => {
+    if (checkoutUrl) window.open(checkoutUrl, "_blank", "noopener,noreferrer");
+  };
+
   const [showHidden, setShowHidden] = useState(false);
   const [busy, setBusy] = useState<"square" | "story" | null>(null);
   const [shareNote, setShareNote] = useState<string | null>(null);
@@ -275,14 +282,27 @@ export default function ResultCard({
           {t("handcraft.eyebrow")}
         </span>
         <p className="mt-3 text-sm italic leading-relaxed text-ink/70">{t("handcraft.story")}</p>
-        <h3 className="mt-3 font-brush text-2xl text-ink">{t("handcraft.title")}</h3>
-        <p className="mt-1 text-sm text-ink/60">{t("handcraft.sub")}</p>
+        <div className="mt-3 flex items-baseline justify-between">
+          <h3 className="font-brush text-2xl text-ink">{t("handcraft.title")}</h3>
+          <span className="shrink-0 rounded-full bg-ink px-3 py-1 text-sm font-extrabold text-cream shadow">
+            {t("handcraft.price")}
+          </span>
+        </div>
+        <p className="mt-1 text-sm text-ink/65">{t("handcraft.sub")}</p>
 
-        <div className="mt-3 rounded-2xl bg-white/60 px-4 py-2.5 text-center text-[13px] font-semibold text-rose">
+        <div className="mt-3 rounded-2xl bg-white/70 px-4 py-2.5 text-center text-[13px] font-bold text-rose">
           {hasShared ? t("handcraft.entered") : t("handcraft.scarcity")}
         </div>
 
-        {hcState === "done" ? (
+        {checkoutUrl ? (
+          // Paid checkout (Lemon Squeezy) — collects email + payment on their side
+          <div className="mt-4">
+            <button type="button" onClick={payHandcraft} className="btn-primary w-full !py-3.5 text-base">
+              {t("handcraft.reserve", { price: t("handcraft.price") })}
+            </button>
+            <p className="mt-2 text-center text-xs font-medium text-ink/55">{t("handcraft.payNote")}</p>
+          </div>
+        ) : hcState === "done" ? (
           <p className="mt-4 text-center font-semibold text-sage">{t("handcraft.thanks")}</p>
         ) : (
           <form onSubmit={submitHandcraft} className="mt-4">
