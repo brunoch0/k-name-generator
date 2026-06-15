@@ -16,6 +16,7 @@ export interface Profile {
   aspiration: string; // "leader" | "healer" | ... | free text
   vibe: string; // vibe id (see VIBE_TAGS) — maps to multiple tags
   element: Tag; // one element tag
+  country?: string; // where they're from (flavour; not shown on card)
   // optional flavour fields fed to the narrative
   words3?: string; // "3 words that describe you"
   favKorean?: string; // favourite Korean words / names / sounds
@@ -71,7 +72,8 @@ export interface NameAnalysis {
 /** The full generated-name payload — identical shape from Anthropic or the
  *  deterministic fallback, so the UI never has to care which produced it. */
 export interface NameResult {
-  surname: {
+  /** Optional — the app generates a GIVEN name only (user keeps their family name). */
+  surname?: {
     hangul: string;
     romanization: string;
     reason_en: string;

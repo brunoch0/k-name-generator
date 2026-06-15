@@ -8,6 +8,33 @@ import LanguageToggle from "./LanguageToggle";
 
 const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
+/**
+ * Build an @font-face for the brush font containing ONLY the glyphs in `text`
+ * (via Google Fonts' `text=` subset param), inlined as a data URI. Passing this
+ * to html-to-image's `fontEmbedCSS` makes the exported PNG render the name in
+ * the handwriting brush font — without scanning (and erroring on) other fonts.
+ */
+const brushCssCache = new Map<string, string>();
+async function brushFontEmbedCSS(text: string): Promise<string> {
+  if (brushCssCache.has(text)) return brushCssCache.get(text)!;
+  try {
+    const cssUrl = `https://fonts.googleapis.com/css2?family=Nanum+Brush+Script&text=${encodeURIComponent(text)}`;
+    const css = await (await fetch(cssUrl)).text();
+    const m = css.match(/url\((https:\/\/[^)]+\.woff2)\)/);
+    if (!m) return "";
+    const buf = await (await fetch(m[1])).arrayBuffer();
+    const bytes = new Uint8Array(buf);
+    let bin = "";
+    for (let i = 0; i < bytes.length; i++) bin += String.fromCharCode(bytes[i]);
+    const b64 = btoa(bin);
+    const face = `@font-face{font-family:'Nanum Brush Script';font-style:normal;font-weight:400;src:url(data:font/woff2;base64,${b64}) format('woff2');}`;
+    brushCssCache.set(text, face);
+    return face;
+  } catch {
+    return "";
+  }
+}
+
 export default function ResultCard({
   result,
   profile,
@@ -50,13 +77,15 @@ export default function ResultCard({
       await document.fonts.ready;
       // double rAF so layout/fonts settle before capture
       await new Promise((r) => requestAnimationFrame(() => requestAnimationFrame(r)));
-      // skipFonts: cross-origin webfonts can't be inlined into the SVG anyway —
-      // skipping avoids noisy SecurityErrors and lets the raster fall back to the
-      // (clean) system Korean/Latin fonts. The on-screen card keeps the webfonts.
+      // Embed ONLY the brush font (subset to the name's glyphs) so the hero name
+      // is hand-brushed in the PNG; other text falls back to clean system fonts.
+      // Providing fontEmbedCSS also stops html-to-image scanning cross-origin
+      // sheets (no SecurityError noise).
+      const fontEmbedCSS = await brushFontEmbedCSS(result.fullName.hangul);
       const dataUrl = await toPng(node, {
         pixelRatio: 2,
         cacheBust: true,
-        skipFonts: true,
+        fontEmbedCSS,
         backgroundColor: "#fdf8f3",
       });
       const link = document.createElement("a");
@@ -71,15 +100,19 @@ export default function ResultCard({
   }
 
   async function share() {
-    const url = window.location.href;
-    const text = `My Korean name is ${result.fullName.hangul} (${result.fullName.romanization}) — find yours at K-Name`;
+    const url = "https://k-name-generator-chohj0228-8690s-projects.vercel.app";
+    // viral hook: states their name + invites the friend to get their own
+    const text = t("result.shareText", {
+      hangul: result.fullName.hangul,
+      roman: result.fullName.romanization,
+    });
     try {
       if (navigator.share) {
         await navigator.share({ title: "K-Name", text, url });
       } else {
         await navigator.clipboard.writeText(`${text} ${url}`);
         setShareNote(t("result.copied"));
-        window.setTimeout(() => setShareNote(null), 2200);
+        window.setTimeout(() => setShareNote(null), 2400);
       }
     } catch {
       /* user cancelled share — still unlock, it's a reward not a gate */
@@ -127,6 +160,7 @@ export default function ResultCard({
             result={result}
             showHidden={showHidden}
             mode="screen"
+            realName={profile?.realName}
             handle={handle}
             animate
           />
@@ -162,8 +196,16 @@ export default function ResultCard({
         </section>
       )}
 
+      {/* primary viral action — share with friends */}
+      <button type="button" onClick={share} className="btn-primary mt-5 w-full text-base">
+        {t("result.shareFriends")}
+      </button>
+      <p className="mt-2 text-center text-xs font-medium text-ink/50">
+        {shareNote ? shareNote : showHidden ? t("result.shared") : t("result.shareUnlockHint")}
+      </p>
+
       {/* export */}
-      <div className="mt-5 grid grid-cols-2 gap-3">
+      <div className="mt-4 grid grid-cols-2 gap-3">
         <button
           type="button"
           className="btn-ghost"
@@ -181,17 +223,6 @@ export default function ResultCard({
           {busy === "story" ? "…" : t("result.downloadStory")}
         </button>
       </div>
-
-      {/* share to unlock */}
-      {!showHidden ? (
-        <button type="button" onClick={share} className="btn-primary mt-3 w-full">
-          {t("result.share")}
-        </button>
-      ) : (
-        <div className="mt-3 rounded-full bg-gold/15 py-3 text-center text-sm font-semibold text-gold">
-          {shareNote ?? t("result.shared")}
-        </div>
-      )}
 
       {/* generate another / restart */}
       <div className="mt-3 grid grid-cols-2 gap-3">
@@ -216,21 +247,19 @@ export default function ResultCard({
           <form onSubmit={submitEmail}>
             <div className="font-bold text-ink">{t("result.emailTitle")}</div>
             <p className="mt-1 text-sm text-ink/55">{t("result.emailSub")}</p>
-            <div className="mt-3 flex gap-2">
-              <input
-                type="email"
-                className="field !py-3 !text-base"
-                placeholder={t("result.emailPlaceholder")}
-                value={email}
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                  if (emailState === "error") setEmailState("idle");
-                }}
-              />
-              <button type="submit" className="btn-primary whitespace-nowrap !px-5 !py-3">
-                {t("result.emailButton")}
-              </button>
-            </div>
+            <input
+              type="email"
+              className="field mt-3 !py-3 !text-base"
+              placeholder={t("result.emailPlaceholder")}
+              value={email}
+              onChange={(e) => {
+                setEmail(e.target.value);
+                if (emailState === "error") setEmailState("idle");
+              }}
+            />
+            <button type="submit" className="btn-primary mt-2 w-full !py-3">
+              {t("result.emailButton")}
+            </button>
             {emailState === "error" && (
               <p className="mt-2 text-sm text-rose">{t("result.emailInvalid")}</p>
             )}
@@ -255,21 +284,19 @@ export default function ResultCard({
           <p className="mt-4 text-center font-semibold text-sage">{t("handcraft.thanks")}</p>
         ) : (
           <form onSubmit={submitHandcraft} className="mt-4">
-            <div className="flex gap-2">
-              <input
-                type="email"
-                className="field !py-3 !text-base"
-                placeholder={t("result.emailPlaceholder")}
-                value={hcEmail}
-                onChange={(e) => {
-                  setHcEmail(e.target.value);
-                  if (hcState === "error") setHcState("idle");
-                }}
-              />
-              <button type="submit" className="btn-primary whitespace-nowrap !px-5 !py-3">
-                {t("handcraft.button")}
-              </button>
-            </div>
+            <input
+              type="email"
+              className="field !py-3 !text-base"
+              placeholder={t("result.emailPlaceholder")}
+              value={hcEmail}
+              onChange={(e) => {
+                setHcEmail(e.target.value);
+                if (hcState === "error") setHcState("idle");
+              }}
+            />
+            <button type="submit" className="btn-primary mt-2 w-full !py-3">
+              {t("handcraft.button")}
+            </button>
             {hcState === "error" && (
               <p className="mt-2 text-sm text-rose">{t("result.emailInvalid")}</p>
             )}
@@ -288,8 +315,8 @@ export default function ResultCard({
         aria-hidden
         style={{ position: "fixed", left: -99999, top: 0, pointerEvents: "none", opacity: 1 }}
       >
-        <NameCard ref={squareRef} result={result} showHidden={showHidden} mode="square" />
-        <NameCard ref={storyRef} result={result} showHidden={showHidden} mode="story" />
+        <NameCard ref={squareRef} result={result} showHidden={showHidden} mode="square" realName={profile?.realName} handle={handle} />
+        <NameCard ref={storyRef} result={result} showHidden={showHidden} mode="story" realName={profile?.realName} handle={handle} />
       </div>
     </div>
   );

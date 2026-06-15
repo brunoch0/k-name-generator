@@ -76,7 +76,7 @@ export default function Quiz({
 
   const canContinue = (): boolean => {
     switch (key) {
-      case "name": return (draft.realName ?? "").trim().length > 0;
+      case "intro": return (draft.realName ?? "").trim().length > 0;
       case "feel": return Boolean(draft.nameFeel);
       case "soundLike": return Boolean(draft.soundLike);
       case "birth": return Boolean(draft.birthDate);
@@ -124,15 +124,54 @@ export default function Quiz({
         />
 
         <div className="mt-7">
-          {key === "name" && (
-            <input
-              autoFocus
-              className="field"
-              placeholder={t("quiz.name.placeholder")}
-              value={draft.realName ?? ""}
-              onChange={(e) => set("realName", e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && canContinue() && go(step + 1)}
-            />
+          {key === "intro" && (
+            <div className="space-y-3">
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-ink/55">
+                  {t("quiz.intro.nameLabel")}
+                </label>
+                <input
+                  autoFocus
+                  className="field"
+                  placeholder={t("quiz.intro.namePlaceholder")}
+                  value={draft.realName ?? ""}
+                  onChange={(e) => set("realName", e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && canContinue() && go(step + 1)}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-ink/55">
+                  {t("quiz.intro.countryLabel")}
+                </label>
+                <input
+                  className="field"
+                  placeholder={t("quiz.intro.countryPlaceholder")}
+                  value={draft.country ?? ""}
+                  onChange={(e) => set("country", e.target.value)}
+                />
+              </div>
+              <div>
+                <label className="mb-1 block text-xs font-semibold text-ink/55">
+                  {t("quiz.intro.handleLabel")}
+                </label>
+                <input
+                  className="field"
+                  placeholder={t("quiz.intro.handlePlaceholder")}
+                  value={draft.handle ?? ""}
+                  onChange={(e) => set("handle", e.target.value)}
+                />
+                <label className="mt-2 flex cursor-pointer items-start gap-2.5 text-sm text-ink/65">
+                  <input
+                    type="checkbox"
+                    className="mt-0.5 h-5 w-5 shrink-0 accent-rose"
+                    checked={Boolean(draft.handleOptIn)}
+                    disabled={!draft.handle?.trim()}
+                    onChange={(e) => set("handleOptIn", e.target.checked)}
+                  />
+                  <span>{t("quiz.intro.handleOptIn")}</span>
+                </label>
+              </div>
+            </div>
           )}
 
           {key === "feel" && (
@@ -231,23 +270,6 @@ export default function Quiz({
             <input autoFocus className="field" placeholder={t("quiz.unique.placeholder")}
               value={draft.unique ?? ""} onChange={(e) => set("unique", e.target.value)}
               onKeyDown={(e) => e.key === "Enter" && go(step + 1)} />
-          )}
-
-          {key === "handle" && (
-            <div>
-              <input autoFocus className="field" placeholder={t("quiz.handle.placeholder")}
-                value={draft.handle ?? ""} onChange={(e) => set("handle", e.target.value)} />
-              <label className="mt-3 flex cursor-pointer items-start gap-2.5 text-sm text-ink/70">
-                <input
-                  type="checkbox"
-                  className="mt-0.5 h-5 w-5 shrink-0 accent-rose"
-                  checked={Boolean(draft.handleOptIn)}
-                  disabled={!draft.handle?.trim()}
-                  onChange={(e) => set("handleOptIn", e.target.checked)}
-                />
-                <span>{t("quiz.handle.optIn")}</span>
-              </label>
-            </div>
           )}
         </div>
       </main>

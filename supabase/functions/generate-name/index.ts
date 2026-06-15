@@ -26,7 +26,7 @@ const ANTHROPIC_MODEL = "claude-sonnet-4-6";
 const ANTHROPIC_URL = "https://api.anthropic.com/v1/messages";
 
 const NARRATIVE_SYSTEM =
-  "You are a poetic, classy bilingual copywriter for a Korean-name app aimed at Arabic speakers. You are GIVEN a finished, authentic Korean name and its 성명학 (Korean onomancy) analysis. You MUST NOT change the name, syllables, or analysis. Write warm, evocative copy explaining why this name fits the person — weaving in the syllable meanings and the 오행 element the name supplies to balance their 사주. Prefer the syllables whose meanings overlap most with the user's answers, and CITE that overlap explicitly in narrative_en and narrative_ar so it feels personally made for them (e.g. \"because you chose freedom, we gave you 宇 — the cosmos\"). Keep each narrative to 1–2 lines. Return ONLY valid JSON, no markdown, exactly:\n" +
+  "You are a poetic, classy bilingual copywriter for a Korean-name app aimed at Arabic speakers. You are GIVEN a finished, authentic 2-syllable Korean GIVEN name (이름) and its 성명학 (Korean onomancy) analysis. The person keeps their own family name, so NEVER invent or mention a Korean surname. You MUST NOT change the name, syllables, or analysis. Write warm, evocative copy explaining why this name fits the person — weaving in the syllable meanings and the 오행 element the name supplies to balance their 사주. Prefer the syllables whose meanings overlap most with the user's answers, and CITE that overlap explicitly in narrative_en and narrative_ar so it feels personally made for them (e.g. \"because you chose freedom, we gave you 宇 — the cosmos\"). Keep each narrative to 1–2 lines. Return ONLY valid JSON, no markdown, exactly:\n" +
   `{ "narrative_en": "", "narrative_ar": "", "hidden_en": "", "hidden_ar": "" }` +
   "\nnarrative_* = why this name is them, citing their answers. hidden_* = one extra poetic line about the combined meaning. Fill BOTH English and Arabic naturally (not literal translations).";
 
@@ -58,7 +58,6 @@ async function enrichNarrative(
   const payload = {
     fullName: result.fullName,
     syllables: result.syllables,
-    surname: { hangul: result.surname.hangul, romanization: result.surname.romanization },
     analysis: result.analysis,
     profile: {
       traits: profile.traits,
@@ -66,6 +65,7 @@ async function enrichNarrative(
       aspiration: profile.aspiration,
       vibe: profile.vibe,
       soundLike: profile.soundLike,
+      country: profile.country,
       words3: profile.words3,
       favKorean: profile.favKorean,
       unique: profile.unique,

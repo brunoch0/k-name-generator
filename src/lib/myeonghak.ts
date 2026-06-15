@@ -74,13 +74,10 @@ export interface SoundFlow {
   score: number; // higher = better
 }
 
-/** Evaluate the 성→이름1→이름2 sound-element flow. */
-export function evaluateSoundFlow(surname: string, g1: string, g2: string): SoundFlow {
-  const nodes: SoundNode[] = [
-    { hangul: surname, element: soundElement(surname) },
-    { hangul: g1, element: soundElement(g1) },
-    { hangul: g2, element: soundElement(g2) },
-  ];
+/** Evaluate the sound-element flow across a sequence of syllables.
+ *  For a 2-syllable given name this is 이름1 → 이름2 (one transition). */
+export function evaluateSoundFlow(syllables: string[]): SoundFlow {
+  const nodes: SoundNode[] = syllables.map((h) => ({ hangul: h, element: soundElement(h) }));
   let score = 0;
   let clash = false;
   let anySaeng = false;
@@ -139,6 +136,18 @@ export function numerology(surnameStrokes: number, g1: number, g2: number): Nume
   const grids = [cheon, inGrid, ji, oe, chong];
   const luckyCount = grids.filter(isLucky).length;
   return { cheon, in: inGrid, ji, oe, chong, luckyCount, score: luckyCount * 4 - (5 - luckyCount) * 3 };
+}
+
+/** 수리 for a 2-syllable given name (no surname): 지격 = 이름 두 글자 획수 합. */
+export function givenNumerology(g1: number, g2: number): {
+  ji: number;
+  lucky: boolean;
+  luckyCount: number;
+  score: number;
+} {
+  const ji = g1 + g2;
+  const lucky = isLucky(ji);
+  return { ji, lucky, luckyCount: lucky ? 1 : 0, score: lucky ? 8 : -4 };
 }
 
 export function chongFortune(chong: number): { en: string; ar: string } {

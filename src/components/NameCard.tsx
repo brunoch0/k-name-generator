@@ -14,7 +14,9 @@ interface Props {
   result: NameResult;
   showHidden: boolean;
   mode: CardMode;
-  /** opt-in social handle → renders "@handle's Korean name" */
+  /** the name the user entered → renders "[name]'s Korean name" */
+  realName?: string;
+  /** opt-in social handle → renders "@handle's Korean name" (takes precedence) */
   handle?: string;
   /** play the brush-reveal animation (screen mode, first show) */
   animate?: boolean;
@@ -25,7 +27,7 @@ interface Props {
  * and the fixed-ratio export canvases (captured by html-to-image).
  */
 const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
-  { result, showHidden, mode, handle, animate },
+  { result, showHidden, mode, realName, handle, animate },
   ref,
 ) {
   const { t, i18n } = useTranslation();
@@ -36,8 +38,14 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
   const size = SIZE[mode];
   const isExport = mode !== "screen";
   const late = animate && mode === "screen" ? "reveal-late" : "";
-  const heroSize = mode === "story" ? 116 : mode === "square" ? 82 : 92;
-  const eyebrow = handle ? t("result.yourNameHandle", { handle }) : t("result.yourName");
+  // a 2-syllable given name is short → render it large
+  const heroSize = mode === "story" ? 132 : mode === "square" ? 96 : 104;
+  const eyebrow = handle
+    ? t("result.yourNameHandle", { handle })
+    : realName
+      ? t("result.yourNamePossessive", { name: realName })
+      : t("result.yourName");
+  const personalized = Boolean(handle || realName);
   const hasElementLine = Boolean((loc === "ar" ? result.element_ar : result.element_en).trim());
 
   return (
@@ -85,7 +93,7 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
 
         {/* hero */}
         <div className="text-center">
-          <div className={`text-xs font-semibold tracking-[0.2em] text-clay ${handle ? "" : "uppercase"}`}>
+          <div className={`text-xs font-semibold tracking-[0.2em] text-clay ${personalized ? "" : "uppercase"}`}>
             {eyebrow}
           </div>
           <div
@@ -107,13 +115,17 @@ const NameCard = forwardRef<HTMLDivElement, Props>(function NameCard(
           {result.syllables.map((s, idx) => (
             <div
               key={idx}
-              className="flex min-w-[118px] flex-col items-center rounded-2xl bg-white/75 px-3 py-3 shadow-sm"
+              className="flex min-w-[120px] flex-col items-center gap-1.5 rounded-2xl bg-white/75 px-3 py-3.5 shadow-sm"
             >
-              <div className="font-hangul-serif text-2xl font-extrabold text-ink">
-                {s.hangul}
-                {s.hanja && <span className="ms-1 text-base font-bold text-clay">{s.hanja}</span>}
+              <div className="flex items-center justify-center gap-1.5 leading-none">
+                <span className="font-hangul-serif text-2xl font-extrabold leading-none text-ink">
+                  {s.hangul}
+                </span>
+                {s.hanja && (
+                  <span className="text-base font-bold leading-none text-clay">{s.hanja}</span>
+                )}
               </div>
-              <div className="mt-1 text-center text-[12px] leading-tight text-ink/65">
+              <div className="text-center text-[12px] leading-tight text-ink/65">
                 {pick(s.meaning_en, s.meaning_ar).split(/[,،]/)[0]}
               </div>
             </div>

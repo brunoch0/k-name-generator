@@ -69,15 +69,16 @@ export const ELEMENT_OPTIONS: { value: Tag; labelKey: string }[] = [
   { value: "earth", labelKey: "elements.earth" },
 ];
 
-// step order (semantic keys) — drives titles and the Quiz switch
+// step order (semantic keys) — drives titles and the Quiz switch.
+// "intro" collects name + country + Instagram handle together up front.
 export const STEP_KEYS = [
-  "name", "feel", "soundLike", "birth", "traits", "value",
-  "aspiration", "vibe", "element", "words3", "favKorean", "unique", "handle",
+  "intro", "feel", "soundLike", "birth", "traits", "value",
+  "aspiration", "vibe", "element", "words3", "favKorean", "unique",
 ] as const;
 
 export type StepKey = (typeof STEP_KEYS)[number];
 
-export const TOTAL_STEPS = STEP_KEYS.length; // 13
+export const TOTAL_STEPS = STEP_KEYS.length; // 12
 
 // which steps are optional (skippable)
-export const OPTIONAL_STEPS: StepKey[] = ["words3", "favKorean", "unique", "handle"];
+export const OPTIONAL_STEPS: StepKey[] = ["words3", "favKorean", "unique"];

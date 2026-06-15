@@ -14,6 +14,7 @@ export interface Profile {
   aspiration: string;
   vibe: string;
   element: Tag;
+  country?: string;
   words3?: string;
   favKorean?: string;
   unique?: string;
@@ -58,7 +59,7 @@ export interface NameAnalysis {
 }
 
 export interface NameResult {
-  surname: { hangul: string; romanization: string; reason_en: string; reason_ar: string };
+  surname?: { hangul: string; romanization: string; reason_en: string; reason_ar: string };
   givenName: { hangul: string; romanization: string };
   syllables: ResultSyllable[];
   fullName: { hangul: string; romanization: string };
